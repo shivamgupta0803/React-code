@@ -2,11 +2,17 @@ import { useContext, useEffect, useState } from "react";
 import CartContext from "../CartContext";
 
 const Cart = () => {
+  let total = 0;
   const [products, setProducts] = useState([]);
   const { cart, setCart } = useContext(CartContext);
+  const [priceFetched, togglePriceFetched] = useState(false);
 
   useEffect(() => {
     if (!cart.items) {
+      return;
+    }
+
+    if (priceFetched) {
       return;
     }
 
@@ -23,8 +29,9 @@ const Cart = () => {
       .then((products) => {
         products = products.product;
         setProducts(products);
+        togglePriceFetched(true);
       });
-  }, [cart]);
+  }, [cart, priceFetched]);
 
   const getQty = (productId) => {
     return cart.items[productId];
@@ -49,19 +56,46 @@ const Cart = () => {
     setCart(_cart);
   };
 
+  const getSum = (productId, price) => {
+    const sum = price * getQty(productId);
+    total += sum;
+    return sum;
+  };
+
+  const handleDelete = (productId) => {
+    const _cart = { ...cart };
+    const qty = _cart.items[productId];
+    delete _cart.items[productId];
+    _cart.totalItems -= qty;
+    setCart(_cart);
+    const updatedProductsList = products.filter(
+      (product) => product.id !== productId
+    );
+    setProducts(updatedProductsList);
+  };
+
+const handleOrderNow = () =>{
+  window.alert('Order placed succesfull!');
+  setProducts([]);
+  setCart({});
+}
+
+
   return (
-    !products.length ?
-    <img className='mx-auto w-1/2 mt-12' src="/image/Empty-cart.png" alt='' />
-:
+  products.length ? 
     <div className="container mx-auto lg:w-1/2 w-full pb-24">
       <h1 className="my-12 font-bold">Cart items</h1>
       <ul>
         {products.map((product) => {
           return (
-            <li className="mb-12">
+            <li className="mb-12" key={product.id}>
               <div className="flex items-center justify-between">
                 <div className="flex item-center">
-                  <img className="h-16" src={product.image} />
+                  <img
+                    className="h-16"
+                    src={product.image}
+                    alt=" not available"
+                  />
                   <span className="font-bold ml-4 w-48">{product.name}</span>
                 </div>
                 <div>
@@ -83,8 +117,11 @@ const Cart = () => {
                     +
                   </button>
                 </div>
-                <span>₹ {product.price}</span>
-                <button className="bg-red-500 px-4 py-2 rounded-full leading-none text-white">
+                <span>₹ {getSum(product.id, product.price)}</span>
+                <button
+                  onClick={() => handleDelete(product.id)}
+                  className="bg-red-500 px-4 py-2 rounded-full leading-none text-white"
+                >
                   Delete
                 </button>
               </div>
@@ -92,15 +129,19 @@ const Cart = () => {
           );
         })}
       </ul>
-      <hr className="my-6"/>
-            <div className="text-right">
-                <b>Grand Total :</b> ₹ 1000
-            </div>
-            <div className="text-right mt-6">
-                <button className="bg-yellow-500 px-4 py-2 rounded-full leading-none">Order Now</button>
-            </div>
+      <hr className="my-6" />
+      <div className="text-right">
+        <b>Grand Total :</b> ₹ {total}
+      </div>
+      <div className="text-right mt-6">
+        <button onClick={handleOrderNow} className="bg-yellow-500 px-4 py-2 rounded-full leading-none">
+          Order Now
+        </button>
+      </div>
     </div>
-  );
+  : 
+  <img className="mx-auto w-1/2 mt-12" src="/images/Empty-cart.png" alt="" />
+  )
 };
 
 export default Cart;
