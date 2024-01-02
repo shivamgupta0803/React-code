@@ -5,8 +5,6 @@ import { useEffect, useState } from "react";
 
 const Products = () => {
 
-  // const { name } = useContext(CartContext)
-
   const [products, setProducts] = useState([]);
 
   useEffect(() => {

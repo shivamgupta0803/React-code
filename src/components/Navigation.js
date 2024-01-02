@@ -19,7 +19,7 @@ const Navigation = () => {
           <img
             style={{ height: 45 }}
             src="/images/pizza-logo.jpg"
-            alt="Image no available"
+            alt="not available "
           />
         </Link>
         <ul className="flex items-center">

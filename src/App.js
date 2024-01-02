@@ -12,7 +12,6 @@ const App = () => {
 
   const [cart, setCart] = useState({});
 
-
   useEffect(() => {
     const cart = window.localStorage.getItem('cart') 
     setCart(JSON.parse(cart));  
@@ -25,6 +24,7 @@ const App = () => {
       return prev
     })
   }, [cart]);
+
 
   return (
     <>

@@ -26,7 +26,7 @@ const SingleProduct = () => {
     <div className='container mx-auto mt-12'>
       <button className='mb-12 font-bold' onClick={()=>{history(-1)}}>Back</button>
       <div className='flex'>
-        <img src={product.image} alt='Image not found' />
+        <img src={product.image} alt=' not found' />
         <div className='ml-16'>
           <h1 className='text-xl font-bold'>{product.name}</h1>
           <div className='text-md'>{product.size}</div>
