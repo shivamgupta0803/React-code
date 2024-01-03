@@ -1,5 +1,5 @@
-import React, {  } from 'react';
+import { createContext } from 'react';
 
-const CartContext = React.createContext(null);
+const CartContext = createContext(null);
 
 export default CartContext;

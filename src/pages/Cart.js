@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import CartContext from "../CartContext";
+import MyComponent from './OrderCompleted'
 
 const Cart = () => {
   let total = 0;
@@ -34,6 +35,9 @@ const Cart = () => {
   }, [cart, priceFetched]);
 
   const getQty = (productId) => {
+    if(!cart.items[productId]){
+      cart.items[productId] = 0;
+    }
     return cart.items[productId];
   };
 
@@ -75,9 +79,10 @@ const Cart = () => {
   };
 
 const handleOrderNow = () =>{
-  window.alert('Order placed succesfull!');
+  window.alert('hey you placed your order Thank you!')
   setProducts([]);
   setCart({});
+
 }
 
 
@@ -119,7 +124,7 @@ const handleOrderNow = () =>{
                 </div>
                 <span>₹ {getSum(product.id, product.price)}</span>
                 <button
-                  onClick={() => handleDelete(product.id)}
+                  onClick={() => handleDelete(product.id, )}
                   className="bg-red-500 px-4 py-2 rounded-full leading-none text-white"
                 >
                   Delete
@@ -140,7 +145,9 @@ const handleOrderNow = () =>{
       </div>
     </div>
   : 
-  <img className="mx-auto w-1/2 mt-12" src="/images/Empty-cart.png" alt="" />
+  <>
+  <MyComponent/>
+  </>
   )
 };
 
